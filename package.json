@@ -1,5 +1,5 @@
 {
-  "name": "release-please",
+  "name": "ftl-release-please",
   "version": "8.0.1",
   "description": "generate release PRs based on the conventionalcommits.org spec",
   "main": "./build/src/index.js",
