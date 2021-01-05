@@ -118,6 +118,10 @@ export class Rust extends ReleasePR {
     });
   }
 
+  protected defaultInitialVersion(): string {
+    return '0.1.0';
+  }
+
   protected async getWorkspaceManifest(): Promise<CargoManifest | null> {
     let content: GitHubFileContents;
     try {
