@@ -23,8 +23,11 @@ import {Commit} from '../graphql-to-commits';
 // Generic
 import {Changelog} from '../updaters/changelog';
 // Cargo.toml support
-import {CargoManifest, CargoToml, parseCargoManifest} from '../updaters/cargo-toml';
-import { version } from 'yargs';
+import {
+  CargoManifest,
+  CargoToml,
+  parseCargoManifest,
+} from '../updaters/cargo-toml';
 
 export class Rust extends ReleasePR {
   static releaserName = 'rust';
@@ -67,7 +70,7 @@ export class Rust extends ReleasePR {
       return undefined;
     }
 
-    let workspaceManifest = await this.getWorkspaceManifest();
+    const workspaceManifest = await this.getWorkspaceManifest();
 
     const updates: Update[] = [];
 
@@ -80,21 +83,31 @@ export class Rust extends ReleasePR {
       })
     );
 
-    let paths: string[] = [];
+    const paths: string[] = [];
 
-    if (workspaceManifest && workspaceManifest.workspace && workspaceManifest.workspace.members) {
-      let members = workspaceManifest.workspace.members;
-      checkpoint(`found workspace with ${members.length} members, upgrading all`, CheckpointType.Success);
+    if (
+      workspaceManifest &&
+      workspaceManifest.workspace &&
+      workspaceManifest.workspace.members
+    ) {
+      const members = workspaceManifest.workspace.members;
+      checkpoint(
+        `found workspace with ${members.length} members, upgrading all`,
+        CheckpointType.Success
+      );
       for (const member of members) {
         paths.push(`${member}/Cargo.toml`);
       }
     } else {
       const manifestPath = this.addPath('Cargo.toml');
-      checkpoint(`single crate found, updating ${manifestPath}`, CheckpointType.Success);
-      paths.push(this.addPath(`Cargo.toml`));
+      checkpoint(
+        `single crate found, updating ${manifestPath}`,
+        CheckpointType.Success
+      );
+      paths.push(this.addPath('Cargo.toml'));
     }
 
-    let versions = new Map();
+    const versions = new Map();
     versions.set(this.packageName, candidate.version);
 
     for (const path of paths) {
@@ -126,7 +139,7 @@ export class Rust extends ReleasePR {
     let content: GitHubFileContents;
     try {
       content = await this.gh.getFileContents('Cargo.toml');
-    } catch(e) {
+    } catch (e) {
       return null;
     }
     return parseCargoManifest(content.parsedContent);

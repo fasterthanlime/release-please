@@ -121,7 +121,7 @@ export interface CargoManifest {
 }
 
 export interface CargoWorkspace {
-  members?: string[],
+  members?: string[];
 }
 
 export interface CargoPackage {
