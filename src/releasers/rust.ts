@@ -76,7 +76,7 @@ export class Rust extends ReleasePR {
 
     updates.push(
       new Changelog({
-        path: 'CHANGELOG.md',
+        path: this.addPath('CHANGELOG.md'),
         changelogEntry,
         version: candidate.version,
         packageName: this.packageName,
