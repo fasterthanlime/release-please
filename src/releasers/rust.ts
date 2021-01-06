@@ -34,7 +34,7 @@ export class Rust extends ReleasePR {
   protected async _run(): Promise<number | undefined> {
     const prefix = this.monorepoTags ? `${this.packageName}-` : undefined;
     const addPrefix = (tagOrBranch: string | undefined): string | undefined => {
-      if (typeof tagOrBranch === "string") {
+      if (typeof tagOrBranch === 'string') {
         return prefix ? `${prefix}${tagOrBranch}` : `${tagOrBranch}`;
       }
       return tagOrBranch;
@@ -155,17 +155,29 @@ export class Rust extends ReleasePR {
     // completely.
 
     // To avoid that, we first fetch commits without a path:
-    let relevantCommits = new Set();
-    for (const commit of await this.gh.commitsSinceSha(sha, perPage, labels, null)) {
+    const relevantCommits = new Set();
+    for (const commit of await this.gh.commitsSinceSha(
+      sha,
+      perPage,
+      labels,
+      null
+    )) {
       relevantCommits.add(commit.sha);
     }
 
     // Then fetch commits for the path (this will include commits for
     // previous versions)
-    let allPathCommits = await this.gh.commitsSinceSha(sha, perPage, labels, path);
+    const allPathCommits = await this.gh.commitsSinceSha(
+      sha,
+      perPage,
+      labels,
+      path
+    );
 
     // Then keep only the "path commits" that are relevant for this release
-    let commits = allPathCommits.filter(commit => relevantCommits.has(commit.sha));
+    const commits = allPathCommits.filter(commit =>
+      relevantCommits.has(commit.sha)
+    );
 
     if (commits.length) {
       checkpoint(
