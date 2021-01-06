@@ -36,18 +36,15 @@ export class CargoToml implements Update {
   }
 
   updateContent(content: string): string {
+    if (!this.versions) {
+      throw new Error('CargoToml called with no versions to update');
+    }
+
+    console.log('parsing ', content);
     const parsed = parseCargoManifest(content);
     if (!parsed.package) {
       checkpoint(
         `${this.path} is not a package manifest`,
-        CheckpointType.Failure
-      );
-      throw new Error(`${this.path} is not a package manifest`);
-    }
-
-    if (!this.versions) {
-      checkpoint(
-        `for ${this.path}: no versions to update`,
         CheckpointType.Failure
       );
       throw new Error(`${this.path} is not a package manifest`);
