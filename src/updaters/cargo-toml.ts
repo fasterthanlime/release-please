@@ -40,7 +40,6 @@ export class CargoToml implements Update {
       throw new Error('CargoToml called with no versions to update');
     }
 
-    console.log('parsing ', content);
     const parsed = parseCargoManifest(content);
     if (!parsed.package) {
       checkpoint(
